@@ -8,7 +8,7 @@
   perSystem = {pkgs, ...}: {
     devshells.default = {
       devshell = {
-        name = "qezta-infra";
+        name = "infra";
         packages = lib.attrsets.attrValues {
           inherit (pkgs) alejandra gh terraform;
         };

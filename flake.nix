@@ -1,5 +1,5 @@
 {
-  description = "Qezta infrastructure flake";
+  description = "Qezta infra flake";
 
   outputs = inputs: let
     inherit (inputs.flake-parts.lib) mkFlake;
@@ -12,9 +12,14 @@
       ];
       perSystem = {system, ...}: {
         _module.args.pkgs =
-          if isX86Darwin system
-          then import inputs."nixpkgs-2605" {inherit system;}
-          else import inputs.nixpkgs {inherit system;};
+          import (
+            if isX86Darwin system
+            then inputs."nixpkgs-2605"
+            else inputs.nixpkgs
+          ) {
+            inherit system;
+            config.allowUnfree = true;
+          };
       };
     });
 
