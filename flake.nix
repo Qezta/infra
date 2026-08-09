@@ -7,7 +7,9 @@
   in
     mkFlake {inherit inputs;} ({inputs, ...}: {
       systems = import inputs.systems;
-      imports = [(inputs.import-tree ./flake)];
+      imports = [
+        (inputs.import-tree ./flake)
+      ];
       perSystem = {system, ...}: {
         _module.args.pkgs =
           if isX86Darwin system
@@ -40,6 +42,13 @@
         nixpkgs.follows = "nixpkgs-2605";
         flake-parts.follows = "flake-parts";
         git-hooks.follows = "git-hooks";
+      };
+    };
+    terranix = {
+      url = "github:terranix/terranix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        systems.follows = "systems";
       };
     };
     OS-nixCfg = {

@@ -5,10 +5,7 @@
 }: {
   imports = [inputs.devshell.flakeModule];
 
-  perSystem = {
-    pkgs,
-    ...
-  }: {
+  perSystem = {pkgs, ...}: {
     devshells.default = {
       devshell = {
         name = "qezta-infra";
