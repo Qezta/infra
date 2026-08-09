@@ -1,0 +1,10 @@
+.direnv/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+!example.tfvars
+.env
+.env.local
+.DS_Store
