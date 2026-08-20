@@ -1,4 +1,7 @@
 .direnv/
+result
+result-*
+**/disabled/
 .terraform/
 *.tfstate
 *.tfstate.*

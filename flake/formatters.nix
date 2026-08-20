@@ -3,10 +3,13 @@
 
   perSystem.treefmt = {
     projectRootFile = "flake.nix";
+    settings.global.excludes = [".github/*"];
+    flakeCheck = false;
     programs = {
       alejandra.enable = true;
       deadnix.enable = true;
       statix.enable = true;
+      mdformat.enable = true;
       terraform.enable = true;
     };
   };
