@@ -20,6 +20,20 @@ Terraform JSON is generated from `terranix/main.nix` with:
 nix build .#terraform-json
 ```
 
+## Qezta GitHub repositories
+
+Repository management is implemented entirely in this repository under
+`orgs/Qezta`, `modules/`, and `terranix/qezta-repositories.nix`.
+
+```sh
+cd orgs/Qezta
+terragrunt init
+terragrunt plan
+```
+
+Set `GITHUB_TOKEN_QEZTA` with a token authorized to manage the Qezta
+organization. Configure a remote state backend before the first apply.
+
 Do not commit Terraform state, variable files, or API tokens. Configure a remote encrypted backend before applying changes.
 
 ## Spaceship DNS

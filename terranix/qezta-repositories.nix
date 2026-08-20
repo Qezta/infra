@@ -7,25 +7,45 @@ _: {
       delete_branch_on_merge = false;
     };
     "divit" = {
-      description = "divit.qezta.com personal portfolio and RAG chatbot";
+      description = "divit.qezta.com — personal portfolio with Gemini-powered RAG chatbot";
       visibility = "public";
+      delete_branch_on_merge = false;
+    };
+    "infra" = {
+      description = "Terraform infrastructure configuration for Qezta";
+      visibility = "public";
+      topics = ["infrastructure" "nix" "terraform" "terranix"];
       delete_branch_on_merge = false;
     };
     "qezta-website" = {
       description = "Qezta Website";
-      homepage_url = "https://www.qezta.com";
+      homepage_url = "https://www.Qezta.com";
       visibility = "public";
       topics = ["flake-parts" "nix" "personal-website" "svelte" "typescript" "vercel-deployment" "vite"];
       delete_branch_on_merge = false;
     };
     "site" = {
-      description = "qezta.com marketing site for Qezta";
+      description = "qezta.com — marketing site for Qezta";
       visibility = "public";
+      topics = [];
+      delete_branch_on_merge = false;
+    };
+    "ssh" = {
+      description = "ssh divit@qezta.com — SSH terminal portfolio mirroring divit.qezta.com, built on wish + Bubble Tea";
+      visibility = "public";
+      topics = ["ssh" "tui" "go" "bubbletea" "wish"];
       delete_branch_on_merge = false;
     };
     "ui" = {
       description = "Shared Svelte component library and design system for Qezta org sub-products";
       visibility = "public";
+      topics = [];
+      delete_branch_on_merge = false;
+    };
+    "secrets" = {
+      description = "Encrypted secrets for Qezta infrastructure and CI";
+      visibility = "private";
+      topics = ["agenix" "infrastructure" "secrets"];
       delete_branch_on_merge = false;
     };
   };

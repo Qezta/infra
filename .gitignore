@@ -3,6 +3,11 @@ result
 result-*
 **/disabled/
 .terraform/
+.terragrunt-cache/
+orgs/*/backend.tf
+orgs/*/provider.tf
+orgs/*/versions.tf
+orgs/*/locals.tf.json
 *.tfstate
 *.tfstate.*
 *.tfvars

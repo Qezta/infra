@@ -14,7 +14,7 @@
         name = "infra";
         motd = "{202}Welcome to {91}${name} {202}devshell!{reset} \n $(menu)";
         packages = lib.attrsets.attrValues {
-          inherit (pkgs) alejandra gh nixd terraform;
+          inherit (pkgs) alejandra gh nixd terraform terragrunt;
         };
       };
     };
