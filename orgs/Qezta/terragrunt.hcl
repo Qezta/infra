@@ -30,5 +30,8 @@ generate "locals" {
 }
 
 inputs = {
-  github_token = get_env("GITHUB_TOKEN_QEZTA", get_env("GITHUB_TOKEN"))
+  github_token = get_env(
+    "GITHUB_TOKEN_QEZTA",
+    run_cmd("--terragrunt-quiet", "gh", "auth", "token"),
+  )
 }
