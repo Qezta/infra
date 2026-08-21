@@ -8,20 +8,3 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
 }
-
-generate "versions" {
-  path      = "versions.tf"
-  if_exists = "overwrite_terragrunt"
-  contents  = <<-EOF
-    terraform {
-      required_version = ">= 1.10"
-
-      required_providers {
-        github = {
-          source  = "integrations/github"
-          version = "~> 6.0"
-        }
-      }
-    }
-  EOF
-}

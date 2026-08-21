@@ -22,8 +22,8 @@ nix build .#terraform-json
 
 ## Qezta GitHub repositories
 
-Repository management is implemented entirely in this repository under
-`orgs/Qezta`, `modules/`, and `terranix/qezta-repositories.nix`.
+Repository management is implemented entirely in Terranix under
+`terranix/qezta-github.nix` and `terranix/qezta-repositories.nix`.
 
 ```sh
 cd orgs/Qezta

@@ -1,8 +1,8 @@
 {inputs, ...}: {
   perSystem = {pkgs, ...}: {
-    packages.qezta-repositories-json = inputs.terranix.lib.terranixConfiguration {
+    packages.qezta-github-json = inputs.terranix.lib.terranixConfiguration {
       inherit pkgs;
-      modules = [../terranix/qezta-repositories.nix];
+      modules = [../terranix/qezta-github.nix];
     };
   };
 }
