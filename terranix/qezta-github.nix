@@ -78,12 +78,16 @@ in
       allows_deletions = false;
     };
 
+    ## Adopt repos that already exist on GitHub; `existing = false` marks one
+
+    ## for Terraform to create instead (the flag can stay once created).
+
     import =
       map (name: {
         to = "github_repository.repos[\"${name}\"]";
         id = name;
       })
-      repoNames;
+      (builtins.filter (name: repos.${name}.existing or true) repoNames);
 
     moved =
       map (name: {
