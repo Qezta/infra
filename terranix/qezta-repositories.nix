@@ -6,6 +6,7 @@
 ##   homepage_url            string
 ##   workflow_permissions    "read" (default) | "write" — GITHUB_TOKEN default
 ##   actions_can_create_prs  bool (default true)
+##   existing                bool (default true); false = create, don't import
 {
   ".github" = {
     description = "Qezta org profile";
@@ -19,6 +20,20 @@
     visibility = "public";
     topics = ["gemini" "personal-website" "portfolio" "qezta" "rag" "svelte" "sveltekit" "typescript" "vercel"];
     delete_branch_on_merge = false;
+  };
+  "company" = {
+    description = "Qezta's company spec: people, roles, policies, processes and finance as code (private)";
+    visibility = "private";
+    topics = ["business-as-code" "company-as-code" "nix" "qezta"];
+    delete_branch_on_merge = true;
+    existing = false;
+  };
+  "company-framework" = {
+    description = "Typed Nix description of a company that compiles to community-standard formats";
+    visibility = "public";
+    topics = ["backstage" "business-as-code" "company-as-code" "nix" "nix-flake" "openslo" "opa" "qezta"];
+    delete_branch_on_merge = true;
+    existing = false;
   };
   "infra" = {
     description = "Terraform infrastructure configuration for Qezta";
