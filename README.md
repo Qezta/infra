@@ -23,7 +23,14 @@ nix build .#terraform-json
 ## Qezta GitHub repositories
 
 Repository management is implemented entirely in Terranix under
-`terranix/qezta-github.nix` and `terranix/qezta-repositories.nix`.
+`terranix/qezta-github.nix` and `terranix/qezta-repositories.nix`. This is
+the single owner of Qezta GitHub resources (absorbed from `forge-tofu` in
+2026-11): repositories, Actions workflow permissions, and branch protection
+(`protectedBranches` in `qezta-github.nix`, empty for now).
+
+`terranix/qezta-actions-environments.nix` holds Actions environment
+definitions that are not yet wired in: their secret source paths need mapping
+to the current secrets layout first.
 
 ```sh
 cd orgs/Qezta
