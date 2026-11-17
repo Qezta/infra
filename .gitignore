@@ -6,6 +6,8 @@ result-*
 .terragrunt-cache/
 orgs/*/backend.tf
 orgs/*/main.tf.json
+dns/*/backend.tf
+dns/*/main.tf.json
 *.tfstate
 *.tfstate.*
 *.tfvars
