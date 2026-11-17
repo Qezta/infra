@@ -7,6 +7,11 @@
 ##   workflow_permissions    "read" (default) | "write" — GITHUB_TOKEN default
 ##   actions_can_create_prs  bool (default true)
 ##   existing                bool (default true); false = create, don't import
+##   required_checks         [string] (default []) status checks the default-branch
+##                           ruleset requires; only list workflows that run on every PR
+##   ruleset_bypass_actions  bool (default false) let GitHub Actions push to the
+##                           default branch (workflows that commit, e.g. gen-sitemap)
+##   require_signed_commits  bool (default false)
 {
   ".github" = {
     description = "Qezta org profile";
@@ -15,6 +20,8 @@
     delete_branch_on_merge = false;
   };
   "divit" = {
+    ## gen-sitemap.yml commits straight to the default branch.
+    ruleset_bypass_actions = true;
     description = "divit.qezta.com: personal portfolio with Gemini-powered RAG chatbot";
     homepage_url = "https://divit.qezta.com";
     visibility = "public";
@@ -34,17 +41,21 @@
     topics = ["backstage" "business-as-code" "company-as-code" "nix" "nix-flake" "openslo" "opa" "qezta"];
     delete_branch_on_merge = true;
     existing = false;
+    ## Its CI runs on every pull request.
+    required_checks = ["check" "template"];
   };
   "infra" = {
-    description = "Terraform infrastructure configuration for Qezta";
+    description = "Qezta's infrastructure as code: GitHub org, repositories, teams and DNS (OpenTofu, Terranix, Terragrunt)";
     visibility = "public";
-    topics = ["cloudflare" "dns" "infrastructure" "nix" "qezta" "spaceship" "terraform" "terranix"];
+    topics = ["dns" "github" "infrastructure" "nix" "opentofu" "qezta" "spaceship" "terragrunt" "terranix"];
     delete_branch_on_merge = false;
     ## Live value at migration time; flip to "read" once its workflows all
     ## declare `permissions:` explicitly.
     workflow_permissions = "write";
   };
   "qezta-website" = {
+    ## gen-sitemap.yml commits straight to the default branch.
+    ruleset_bypass_actions = true;
     description = "Qezta Website";
     homepage_url = "https://www.Qezta.com";
     visibility = "public";
@@ -54,6 +65,8 @@
     workflow_permissions = "write";
   };
   "site" = {
+    ## gen-sitemap.yml commits straight to the default branch.
+    ruleset_bypass_actions = true;
     description = "qezta.com: marketing site for Qezta";
     homepage_url = "https://qezta.com";
     visibility = "public";

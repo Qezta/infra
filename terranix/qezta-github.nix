@@ -2,10 +2,7 @@ _: let
   repos = import ./qezta-repositories.nix;
   repoNames = builtins.attrNames repos;
 
-  ## Branch protection rules, keyed by repo name: { <repo> = { branch = "main"; }; }
-  protectedBranches = {};
-
-  ## Validated at `nix build` time, before Terraform ever sees the config.
+  ## Validated at `nix build` time, before OpenTofu ever sees the config.
   active = builtins.filter (n: !(repos.${n}.archived or false)) repoNames;
   missingDescription = builtins.filter (n: (repos.${n}.description or "") == "") active;
   badWorkflowPerms =
@@ -33,8 +30,16 @@ in
       sensitive = true;
     };
 
+    ## Teams, memberships, repository access and rulesets come from the
+    ## company projection; org settings and CI environments are separate.
+    imports = [
+      ./qezta-teams.nix
+      ./qezta-rulesets.nix
+      ./qezta-org.nix
+      ./qezta-ci.nix
+    ];
+
     locals.repos = repos;
-    locals.protected_branches = protectedBranches;
 
     resource.github_repository.repos = {
       for_each = "\${local.repos}";
@@ -66,22 +71,8 @@ in
       can_approve_pull_request_reviews = "\${try(each.value.actions_can_create_prs, true)}";
     };
 
-    resource.github_branch_protection.repos = {
-      for_each = "\${local.protected_branches}";
-      repository_id = "\${github_repository.repos[each.key].node_id}";
-      pattern = "\${each.value.branch}";
-      ## Admin bypass stays on so a solo maintainer can't lock themselves out.
-      enforce_admins = false;
-      required_linear_history = true;
-      require_conversation_resolution = true;
-      allows_force_pushes = false;
-      allows_deletions = false;
-    };
-
     ## Adopt repos that already exist on GitHub; `existing = false` marks one
-
-    ## for Terraform to create instead (the flag can stay once created).
-
+    ## for OpenTofu to create instead (the flag can stay once created).
     import =
       map (name: {
         to = "github_repository.repos[\"${name}\"]";
@@ -101,6 +92,5 @@ in
       private_repos.value = "\${[for name, repo in github_repository.repos : name if repo.visibility == \"private\"]}";
       repo_count.value = "\${length(github_repository.repos)}";
       write_workflow_repos.value = "\${[for k, r in github_workflow_repository_permissions.repos : k if r.default_workflow_permissions == \"write\"]}";
-      protected_branch_rules.value = "\${{for k, r in github_branch_protection.repos : k => r.pattern}}";
     };
   }
