@@ -1,0 +1,240 @@
+{
+  "organization": "qezta",
+  "roles": {
+    "engineering": {
+      "description": "Builds, ships and operates Qezta's software.",
+      "githubMembers": [
+        "DivitMittal"
+      ],
+      "githubPermission": "maintain",
+      "githubTeam": "engineering",
+      "parent": "founder"
+    },
+    "finance": {
+      "description": "Books, invoicing, tax and payments.",
+      "githubMembers": [
+        "DivitMittal"
+      ],
+      "githubPermission": "pull",
+      "githubTeam": null,
+      "parent": "founder"
+    },
+    "founder": {
+      "description": "Sets direction and is ultimately accountable for everything.",
+      "githubMembers": [
+        "DivitMittal"
+      ],
+      "githubPermission": "admin",
+      "githubTeam": "founders",
+      "parent": null
+    },
+    "legal": {
+      "description": "Contracts, policies and regulatory compliance.",
+      "githubMembers": [
+        "DivitMittal"
+      ],
+      "githubPermission": "pull",
+      "githubTeam": null,
+      "parent": "founder"
+    },
+    "operations": {
+      "description": "Keeps the business running day to day.",
+      "githubMembers": [
+        "DivitMittal"
+      ],
+      "githubPermission": "pull",
+      "githubTeam": null,
+      "parent": "founder"
+    },
+    "security": {
+      "description": "Keeps systems and data secure.",
+      "githubMembers": [
+        "DivitMittal"
+      ],
+      "githubPermission": "triage",
+      "githubTeam": "security",
+      "parent": "founder"
+    }
+  },
+  "specVersion": "0.1.0",
+  "systems": {
+    "company": {
+      "codeowners": [
+        {
+          "owners": [
+            "founder"
+          ],
+          "pattern": "*"
+        },
+        {
+          "owners": [
+            "finance"
+          ],
+          "pattern": "/finance/"
+        },
+        {
+          "owners": [
+            "legal"
+          ],
+          "pattern": "/legal/"
+        },
+        {
+          "owners": [
+            "security"
+          ],
+          "pattern": "/secrets/"
+        }
+      ],
+      "description": "This repository: Qezta's company spec, policies, processes and finance as code.",
+      "domain": "platform",
+      "lifecycle": "experimental",
+      "owner": "founder",
+      "repo": "Qezta/company",
+      "type": "documentation"
+    },
+    "company-framework": {
+      "codeowners": [
+        {
+          "owners": [
+            "engineering"
+          ],
+          "pattern": "*"
+        }
+      ],
+      "description": "Typed Nix description of a company that compiles to community-standard formats.",
+      "domain": "platform",
+      "lifecycle": "experimental",
+      "owner": "engineering",
+      "repo": "Qezta/company-framework",
+      "type": "library"
+    },
+    "divit": {
+      "codeowners": [
+        {
+          "owners": [
+            "engineering"
+          ],
+          "pattern": "*"
+        }
+      ],
+      "description": "divit.qezta.com: personal portfolio with a Gemini-powered RAG chatbot (standalone repository).",
+      "domain": "web",
+      "lifecycle": "experimental",
+      "owner": "engineering",
+      "repo": "Qezta/divit",
+      "type": "website"
+    },
+    "github-profile": {
+      "codeowners": [
+        {
+          "owners": [
+            "engineering"
+          ],
+          "pattern": "*"
+        }
+      ],
+      "description": "Qezta GitHub organization profile.",
+      "domain": "platform",
+      "lifecycle": "experimental",
+      "owner": "engineering",
+      "repo": "Qezta/.github",
+      "type": "documentation"
+    },
+    "infra": {
+      "codeowners": [
+        {
+          "owners": [
+            "engineering"
+          ],
+          "pattern": "*"
+        }
+      ],
+      "description": "Qezta's infrastructure as code: GitHub repositories and settings, DNS and domains.",
+      "domain": "platform",
+      "lifecycle": "experimental",
+      "owner": "engineering",
+      "repo": "Qezta/infra",
+      "type": "infrastructure"
+    },
+    "qezta-website": {
+      "codeowners": [
+        {
+          "owners": [
+            "engineering"
+          ],
+          "pattern": "*"
+        }
+      ],
+      "description": "Monorepo that Vercel deploys as divit.qezta.com and qezta.com (apps/divit, apps/qezta, packages/ui).",
+      "domain": "web",
+      "lifecycle": "experimental",
+      "owner": "engineering",
+      "repo": "Qezta/qezta-website",
+      "type": "website"
+    },
+    "secrets": {
+      "codeowners": [
+        {
+          "owners": [
+            "security"
+          ],
+          "pattern": "*"
+        }
+      ],
+      "description": "Encrypted secrets for Qezta infrastructure and CI.",
+      "domain": "platform",
+      "lifecycle": "experimental",
+      "owner": "security",
+      "repo": "Qezta/secrets",
+      "type": "infrastructure"
+    },
+    "site": {
+      "codeowners": [
+        {
+          "owners": [
+            "engineering"
+          ],
+          "pattern": "*"
+        }
+      ],
+      "description": "qezta.com: marketing site for Qezta (standalone repository, under development).",
+      "domain": "web",
+      "lifecycle": "experimental",
+      "owner": "engineering",
+      "repo": "Qezta/site",
+      "type": "website"
+    },
+    "ssh": {
+      "codeowners": [
+        {
+          "owners": [
+            "engineering"
+          ],
+          "pattern": "*"
+        }
+      ],
+      "description": "ssh divit@qezta.com: SSH terminal portfolio built on wish and Bubble Tea.",
+      "domain": "web",
+      "lifecycle": "experimental",
+      "owner": "engineering",
+      "repo": "Qezta/ssh",
+      "type": "service"
+    },
+    "ui": {
+      "codeowners": [
+        {
+          "owners": [
+            "engineering"
+          ],
+          "pattern": "*"
+        }
+      ],
+      "description": "Shared Svelte component library and design system for Qezta sub-products.",
+      "domain": "web",
+      "lifecycle": "experimental",
+      "owner": "engineering",
+      "repo": "Qezta/ui",
+      "type": "library"
+    }
+  }
+}

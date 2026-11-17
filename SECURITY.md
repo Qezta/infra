@@ -15,7 +15,7 @@ receive fixes at the maintainers' discretion.
 **Please do not open a public issue for suspected security vulnerabilities.**
 
 Report privately through
-[GitHub Security Advisories](https://github.com/%3Cowner%3E/%7Bproject-name%7D/security/advisories/new)
+[GitHub Security Advisories](https://github.com/Qezta/infra/security/advisories/new)
 for this repository. If private reporting isn't available in your environment,
 contact the maintainers through the contact link on their GitHub profile.
 
