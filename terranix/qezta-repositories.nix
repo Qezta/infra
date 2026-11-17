@@ -9,8 +9,10 @@
 ##   existing                bool (default true); false = create, don't import
 ##   required_checks         [string] (default []) status checks the default-branch
 ##                           ruleset requires; only list workflows that run on every PR
-##   ruleset_bypass_actions  bool (default false) let GitHub Actions push to the
-##                           default branch (workflows that commit, e.g. gen-sitemap)
+##   ruleset_require_pr      bool (default true) require pull requests on the
+##                           default branch; false where a workflow commits straight
+##                           to it (e.g. gen-sitemap), since GitHub Actions can't be a
+##                           ruleset bypass actor in this org
 ##   require_signed_commits  bool (default false)
 {
   ".github" = {
@@ -21,7 +23,8 @@
   };
   "divit" = {
     ## gen-sitemap.yml commits straight to the default branch.
-    ruleset_bypass_actions = true;
+    ## TODO: make it open a pull request, then drop this.
+    ruleset_require_pr = false;
     description = "divit.qezta.com: personal portfolio with Gemini-powered RAG chatbot";
     homepage_url = "https://divit.qezta.com";
     visibility = "public";
@@ -55,7 +58,8 @@
   };
   "qezta-website" = {
     ## gen-sitemap.yml commits straight to the default branch.
-    ruleset_bypass_actions = true;
+    ## TODO: make it open a pull request, then drop this.
+    ruleset_require_pr = false;
     description = "Qezta Website";
     homepage_url = "https://www.Qezta.com";
     visibility = "public";
@@ -66,7 +70,8 @@
   };
   "site" = {
     ## gen-sitemap.yml commits straight to the default branch.
-    ruleset_bypass_actions = true;
+    ## TODO: make it open a pull request, then drop this.
+    ruleset_require_pr = false;
     description = "qezta.com: marketing site for Qezta";
     homepage_url = "https://qezta.com";
     visibility = "public";

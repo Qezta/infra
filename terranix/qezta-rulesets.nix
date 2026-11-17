@@ -1,11 +1,12 @@
 ## Default-branch rulesets for public repositories: changes land through pull
-## requests, no force pushes, no branch deletion. Org admins may bypass only
-## inside a pull request (e.g. to merge with a failing check), never by
-## pushing directly. Rulesets need a paid plan on private repos, and the org is
+## requests (except where a workflow commits directly; see
+## `ruleset_require_pr`), no force pushes, no branch deletion. Org admins may
+## bypass only inside a pull request (e.g. to merge with a failing check).
+## The GitHub Actions app can't be a bypass actor here (GitHub returns 422),
+## which is why direct-commit repos drop the pull request rule instead. Rulesets need a paid plan on private repos, and the org is
 ## on GitHub Free, so private repos are skipped.
 {lib, ...}: let
   repos = import ./qezta-repositories.nix;
-  githubActionsAppId = 15368; # https://api.github.com/apps/github-actions
   eligible = lib.filterAttrs (_: r: r.visibility == "public" && !(r.archived or false)) repos;
 
   ## One resource per repository: nested blocks differ per repo, which
@@ -21,24 +22,20 @@
       include = ["~DEFAULT_BRANCH"];
       exclude = [];
     };
-    bypass_actors =
-      [
-        ## OrganizationAdmin takes no actor_id.
-        {
-          actor_type = "OrganizationAdmin";
-          bypass_mode = "pull_request";
-        }
-      ]
-      ++ lib.optional (r.ruleset_bypass_actions or false) {
-        actor_id = githubActionsAppId;
-        actor_type = "Integration";
-        bypass_mode = "always";
-      };
+    bypass_actors = [
+      ## OrganizationAdmin takes no actor_id.
+      {
+        actor_type = "OrganizationAdmin";
+        bypass_mode = "pull_request";
+      }
+    ];
     rules =
       {
         deletion = true;
         non_fast_forward = true;
         required_signatures = r.require_signed_commits or false;
+      }
+      // lib.optionalAttrs (r.ruleset_require_pr or true) {
         pull_request = {
           ## A one-person org can't approve its own pull requests.
           required_approving_review_count = 0;
