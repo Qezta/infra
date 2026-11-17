@@ -101,7 +101,7 @@ flowchart LR
   root(["infra/"])
   root --> rh["root.hcl<br/>state: local or encrypted R2"]
   root --> orgs["orgs/Qezta/<br/>GitHub org unit"]
-  root --> dns["dns/qezta.com/<br/>email DNS unit"]
+  root --> dns["dns/qezta.com/<br/>Cloudflare DNS unit"]
   root --> data["data/company/<br/>public projection"]
   root --> tn["terranix/"]
   root --> docs["docs/<br/>remote state · decisions"]
@@ -112,7 +112,7 @@ flowchart LR
   tn --> t4["qezta-rulesets.nix<br/>default-branch rulesets"]
   tn --> t5["qezta-org.nix<br/>org settings (flagged)"]
   tn --> t6["qezta-ci.nix<br/>infra-apply environment"]
-  tn --> t7["qezta-dns.nix<br/>DMARC"]
+  tn --> t7["qezta-dns.nix<br/>Cloudflare DNS · Email Routing"]
 ```
 
 ## GitHub Organization
@@ -127,11 +127,11 @@ flowchart LR
 
 ## DNS
 
-`qezta.com` uses Spaceship DNS. `dns/qezta.com` manages individual email
-records with `spaceship_dns_record` (never the plural resource, which would
-delete every record it doesn't list). It currently adds a monitoring-only
-DMARC record; MX and SPF belong to Spaceship email forwarding. Needs
-`SPACESHIP_API_KEY` and `SPACESHIP_API_SECRET`.
+`qezta.com` is moving from Spaceship DNS to Cloudflare (Spaceship stays the
+registrar). `dns/qezta.com` declares the zone, every record, and Cloudflare
+Email Routing forwards for `divit@`, `hello@`, `hi@`, `security@`,
+`privacy@` and `legal@`. The nameserver cutover is a flagged stage, guarded
+against DNSSEC breakage; follow [docs/dns-migration.md](docs/dns-migration.md).
 
 ## State and CI
 
@@ -157,6 +157,7 @@ flowchart LR
 - [0001: GitHub teams and access come from the company projection](docs/decisions/0001-org-from-company-projection.md)
 - [0002: Flat GitHub teams](docs/decisions/0002-flat-github-teams.md)
 - [0003: CODEOWNERS through pull requests](docs/decisions/0003-codeowners-sync-via-ci.md)
+- [0004: DNS and email routing on Cloudflare](docs/decisions/0004-dns-on-cloudflare.md)
 
 <div align="right">
 
