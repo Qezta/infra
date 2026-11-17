@@ -1,7 +1,6 @@
----
-status: accepted
-date: 2026-11-17
----
+______________________________________________________________________
+
+## status: accepted date: 2026-11-17
 
 # Keep GitHub teams flat
 

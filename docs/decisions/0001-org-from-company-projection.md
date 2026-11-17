@@ -1,7 +1,6 @@
----
-status: accepted
-date: 2026-11-17
----
+______________________________________________________________________
+
+## status: accepted date: 2026-11-17
 
 # Generate GitHub teams and access from the company projection
 
