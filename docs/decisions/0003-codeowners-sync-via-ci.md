@@ -1,7 +1,6 @@
----
-status: accepted
-date: 2026-11-17
----
+______________________________________________________________________
+
+## status: accepted date: 2026-11-17
 
 # Deliver CODEOWNERS through pull requests, not github_repository_file
 

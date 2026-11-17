@@ -15,8 +15,10 @@ to move it to Cloudflare R2. Nothing below has been done yet.
 
 1. **Create the bucket** in the Cloudflare dashboard (R2 → Create bucket →
    `qezta-tofu-state`, location hint near you). Keep it private.
+
 1. **Create an R2 API token** scoped to that bucket with Object Read & Write.
    Note the access key ID, secret, and your Cloudflare account ID.
+
 1. **Choose an encryption passphrase** (at least 16 characters; store it in
    your password manager and in the secrets repo with ragenix). Build the
    `TF_ENCRYPTION` value:
@@ -43,6 +45,7 @@ to move it to Cloudflare R2. Nothing below has been done yet.
    `tofu apply` runs at once; the second must fail to acquire the lock. If it
    doesn't, R2 isn't honouring conditional writes: stop and use a different
    locking approach before moving real state.
+
 1. **Migrate** each unit:
 
    ```sh
@@ -54,6 +57,7 @@ to move it to Cloudflare R2. Nothing below has been done yet.
 
    Then remove `fallback {}` from `TF_ENCRYPTION`, run `terragrunt plan` again
    to confirm the encrypted state reads, and delete the local state files.
+
 1. **Enable CI**: add repository secrets `R2_ACCESS_KEY_ID`,
    `R2_SECRET_ACCESS_KEY`, `TF_ENCRYPTION` and `QEZTA_INFRA_TOKEN` (a token
    with `repo` and `admin:org`), the variable `CLOUDFLARE_ACCOUNT_ID`, then set

@@ -7,7 +7,7 @@
 
 </div>
 
----
+______________________________________________________________________
 
 <div align='center'>
     <a href="https://github.com/Qezta/infra/stargazers">
@@ -25,7 +25,7 @@
     <img src="https://img.shields.io/github/languages/top/Qezta/infra?style=for-the-badge&color=purple" alt="repo-top-language"/>
 </div>
 
----
+______________________________________________________________________
 
 <div align='center'>
     <a href="https://github.com/Qezta/infra/actions/workflows/flake-check.yml">
@@ -36,7 +36,7 @@
     </a>
 </div>
 
----
+______________________________________________________________________
 
 ## Contents
 
@@ -49,7 +49,7 @@
 - [State and CI](#state-and-ci)
 - [Decisions](#decisions)
 
----
+______________________________________________________________________
 
 ## Overview
 
@@ -96,23 +96,23 @@ flowchart LR
 
 ## Project Structure
 
-```
-./
-├── root.hcl                 # state backend (local, or encrypted R2 with TOFU_REMOTE_STATE=true)
-├── orgs/Qezta/              # Terragrunt unit for the GitHub org
-├── dns/qezta.com/           # Terragrunt unit for qezta.com email DNS (Spaceship)
-├── terranix/
-│   ├── qezta-github.nix     # repositories, Actions workflow permissions
-│   ├── qezta-repositories.nix  # the repository map
-│   ├── qezta-teams.nix      # teams, memberships, repository access (from the projection)
-│   ├── qezta-rulesets.nix   # default-branch rulesets
-│   ├── qezta-org.nix        # org settings, Actions policy, membership (flagged)
-│   ├── qezta-members.nix    # org members and their org role
-│   ├── qezta-ci.nix         # infra-apply deployment environment
-│   └── qezta-dns.nix        # DMARC and other email records
-├── data/company/            # public projection synced from Qezta/company
-├── docs/                    # remote-state bootstrap, decision records
-└── flake/                   # devshell, formatters, checks, Terranix packages, workflows
+```mermaid
+flowchart LR
+  root(["infra/"])
+  root --> rh["root.hcl<br/>state: local or encrypted R2"]
+  root --> orgs["orgs/Qezta/<br/>GitHub org unit"]
+  root --> dns["dns/qezta.com/<br/>email DNS unit"]
+  root --> data["data/company/<br/>public projection"]
+  root --> tn["terranix/"]
+  root --> docs["docs/<br/>remote state · decisions"]
+  root --> fl["flake/<br/>devshell · checks · workflows"]
+  tn --> t1["qezta-github.nix<br/>repositories · workflow permissions"]
+  tn --> t2["qezta-repositories.nix<br/>repository map"]
+  tn --> t3["qezta-teams.nix<br/>teams · members · access"]
+  tn --> t4["qezta-rulesets.nix<br/>default-branch rulesets"]
+  tn --> t5["qezta-org.nix<br/>org settings (flagged)"]
+  tn --> t6["qezta-ci.nix<br/>infra-apply environment"]
+  tn --> t7["qezta-dns.nix<br/>DMARC"]
 ```
 
 ## GitHub Organization
@@ -140,6 +140,17 @@ the move to an encrypted, locked Cloudflare R2 backend. Once it's done and the
 `REMOTE_STATE_ENABLED` variable is set, pull requests get a `tofu plan`
 comment and merges to `main` apply after approval in the `infra-apply`
 environment.
+
+```mermaid
+flowchart LR
+  pr["pull request"] --> plan["tofu-plan.yml<br/>plan, posted as a comment"]
+  pr --> merge["merge to main"]
+  merge --> gate{"infra-apply<br/>reviewer approves?"}
+  gate -- yes --> apply["tofu-apply.yml<br/>terragrunt apply"]
+  apply --> gh["GitHub org"]
+  state[("R2 state<br/>encrypted, locked")] <--> plan
+  state <--> apply
+```
 
 ## Decisions
 
