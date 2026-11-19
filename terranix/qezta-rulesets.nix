@@ -1,10 +1,7 @@
 ## Default-branch rulesets for public repositories: changes land through pull
-## requests (except where a workflow commits directly; see
-## `ruleset_require_pr`), no force pushes, no branch deletion. Org admins may
-## bypass only inside a pull request (e.g. to merge with a failing check).
-## The GitHub Actions app can't be a bypass actor here (GitHub returns 422),
-## which is why direct-commit repos drop the pull request rule instead. Rulesets need a paid plan on private repos, and the org is
-## on GitHub Free, so private repos are skipped.
+## requests, with force pushes and branch deletion blocked. Org admins may
+## bypass only inside a pull request. Private repositories are skipped because
+## rulesets require a paid plan there.
 {lib, ...}: let
   repos = import ./qezta-repositories.nix;
   eligible = lib.filterAttrs (_: r: r.visibility == "public" && !(r.archived or false)) repos;
