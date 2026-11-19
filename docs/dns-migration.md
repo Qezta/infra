@@ -10,7 +10,8 @@ flowchart TD
   s1["1. Build<br/>Cloudflare zone, records, Email Routing<br/>(Spaceship still authoritative: no visible change)"] --> s2
   s2["2. Verify<br/>dig @&lt;cloudflare-ns&gt; · click the verification email"] --> s3
   s3["3. Disable DNSSEC at Spaceship<br/>wait until dig +short DS qezta.com is empty"] --> s4
-  s4["4. Cutover<br/>QEZTA_DNS_CUTOVER=true<br/>nameservers → Cloudflare"] --> s5
+  s4["4. Cutover<br/>QEZTA_DNS_CUTOVER=true<br/>nameservers → Cloudflare"] --> s45
+  s45["4b. Email Routing<br/>QEZTA_DNS_EMAIL_ROUTING=true<br/>(zone active, inbox verified)"] --> s5
   s5["5. Re-sign<br/>QEZTA_DNS_DNSSEC=true<br/>publish the new DS at Spaceship"]
 ```
 
@@ -34,10 +35,15 @@ Spaceship API (2026-11-19).
 
 ```sh
 cd dns/qezta.com
-terragrunt plan     # zone, 5 records, Email Routing, 6 forward rules
+terragrunt plan     # zone, records, transitional mail records, inbox address
 terragrunt apply
 terragrunt output name_servers
 ```
+
+If the token can't create zones, add qezta.com once in the dashboard
+(manual DNS entry, Free plan, don't change nameservers) and import it:
+`terragrunt import cloudflare_zone.qezta <zone-id>`, then import any records
+the dashboard created.
 
 Spaceship is still authoritative, so nothing changes for visitors yet.
 
@@ -65,15 +71,30 @@ Points the registrar's nameservers at Cloudflare. Resolvers switch as the old
 NS records expire (up to two days). Mail sent during the switch may arrive
 through either path; both forward to the same inbox.
 
+## 4b. Switch mail to Email Routing
+
+Cloudflare only enables Email Routing once the zone is active, so until now
+the zone carries Spaceship forwarding's MX and SPF records and mail keeps
+flowing through Spaceship. Once `terragrunt output` shows the zone active and
+the forwarding inbox is verified:
+
+```sh
+QEZTA_DNS_CUTOVER=true QEZTA_DNS_EMAIL_ROUTING=true terragrunt apply
+```
+
+This removes the Spaceship records and enables Email Routing (Cloudflare's
+MX, SPF and DKIM) with the forward rules. If Cloudflare reports conflicting
+MX records, run the apply once more: the removal and the enable can race.
+
 ## 5. Re-sign with DNSSEC
 
 ```sh
-QEZTA_DNS_CUTOVER=true QEZTA_DNS_DNSSEC=true terragrunt apply
+QEZTA_DNS_CUTOVER=true QEZTA_DNS_EMAIL_ROUTING=true QEZTA_DNS_DNSSEC=true terragrunt apply
 terragrunt output ds_record
 ```
 
-Add that DS record at Spaceship (Domain → DNSSEC). Keep both flags set from
-now on.
+Add that DS record at Spaceship (Domain → DNSSEC). Keep all three flags set
+from now on.
 
 ## Rollback
 

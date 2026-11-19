@@ -2,14 +2,14 @@
 ## nameserver cutover at Spaceship (the registrar). Runbook and staging:
 ## docs/dns-migration.md. Stages are controlled by Terragrunt inputs:
 ##   cutover        point the registrar's nameservers at Cloudflare
+##   email_routing  swap Spaceship forwarding for Cloudflare Email Routing
+##                  (needs an active zone, i.e. after the cutover)
 ##   enable_dnssec  sign the zone on Cloudflare (after the cutover)
 {lib, ...}: let
   domain = "qezta.com";
 
   ## Every custom record Spaceship DNS serves (Spaceship API export,
-  ## 2026-11-19).
-  ## Spaceship's email-forwarding MX/SPF are deliberately absent: Email
-  ## Routing publishes its own, and two SPF records would break SPF.
+  ## 2026-11-19). Mail records are separate (see `transitional`).
   records = {
     apex = {
       type = "A";
@@ -52,6 +52,34 @@
     };
   };
 
+  ## Spaceship email forwarding's records, present until `email_routing`
+  ## switches mail to Cloudflare. Email Routing only works on an active zone,
+  ## so these keep mail flowing across the nameserver cutover. Removing them
+  ## and enabling Email Routing happen together (two SPF records would break
+  ## SPF).
+  transitional = {
+    spaceship-mx1 = {
+      type = "MX";
+      name = "@";
+      content = "mx1.efwd.spaceship.net";
+      priority = 0;
+      comment = "Spaceship email forwarding (until Email Routing)";
+    };
+    spaceship-mx2 = {
+      type = "MX";
+      name = "@";
+      content = "mx2.efwd.spaceship.net";
+      priority = 0;
+      comment = "Spaceship email forwarding (until Email Routing)";
+    };
+    spaceship-spf = {
+      type = "TXT";
+      name = "@";
+      content = "\"v=spf1 include:spf.efwd.spaceship.net ~all\"";
+      comment = "Spaceship email forwarding (until Email Routing)";
+    };
+  };
+
   ## Addresses forwarded to var.email_forward_to.
   forwards = ["divit" "hello" "hi" "security" "privacy" "legal"];
 in {
@@ -87,6 +115,11 @@ in {
       type = "bool";
       default = false;
     };
+    email_routing = {
+      description = "Switch mail from Spaceship forwarding to Cloudflare Email Routing. Needs an active zone (after the cutover).";
+      type = "bool";
+      default = false;
+    };
     enable_dnssec = {
       description = "Sign the zone on Cloudflare. Only after the cutover; then publish the DS at Spaceship.";
       type = "bool";
@@ -110,10 +143,23 @@ in {
         ttl = 1;
         proxied = false;
       })
-      records;
+      records
+      ## Spaceship forwarding's MX/SPF carry mail across the cutover, until
+      ## Email Routing (which needs an active zone) replaces them.
+      // lib.mapAttrs (_: r:
+        {
+          count = "\${var.email_routing ? 0 : 1}";
+          zone_id = "\${cloudflare_zone.qezta.id}";
+          inherit (r) type name content comment;
+          ttl = 1;
+          proxied = false;
+        }
+        // lib.optionalAttrs (r ? priority) {inherit (r) priority;})
+      transitional;
 
     ## Turns on Email Routing and publishes its MX, SPF and DKIM records.
     cloudflare_email_routing_dns.qezta = {
+      count = "\${var.email_routing ? 1 : 0}";
       zone_id = "\${cloudflare_zone.qezta.id}";
       name = domain;
     };
@@ -127,6 +173,7 @@ in {
 
     cloudflare_email_routing_rule = lib.listToAttrs (map (local:
       lib.nameValuePair local {
+        count = "\${var.email_routing ? 1 : 0}";
         zone_id = "\${cloudflare_zone.qezta.id}";
         name = "${local}@${domain}";
         enabled = true;
@@ -155,7 +202,7 @@ in {
         provider = "custom";
         hosts = "\${cloudflare_zone.qezta.name_servers}";
       };
-      depends_on = ["cloudflare_dns_record.apex" "cloudflare_email_routing_dns.qezta"];
+      depends_on = ["cloudflare_dns_record.apex"];
     };
 
     cloudflare_zone_dnssec.qezta = {

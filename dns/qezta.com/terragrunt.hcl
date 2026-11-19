@@ -4,7 +4,7 @@
 # Credentials are decrypted at run time from DivitMittal/infra-nixCfg-secrets
 # (scripts/read-secret, cloud/{cloudflare,spaceship}/*.age) and handed to the
 # providers through the environment. Stage flags: QEZTA_DNS_CUTOVER,
-# QEZTA_DNS_DNSSEC.
+# QEZTA_DNS_EMAIL_ROUTING, QEZTA_DNS_DNSSEC.
 include "root" {
   path = find_in_parent_folders("root.hcl")
 }
@@ -54,5 +54,6 @@ inputs = {
   cloudflare_account_id = run_cmd("--terragrunt-quiet", local.secret, "cloud/cloudflare/account_id.age")
   email_forward_to      = run_cmd("--terragrunt-quiet", local.secret, "cloud/cloudflare/email_forward_to.age")
   cutover               = get_env("QEZTA_DNS_CUTOVER", "false") == "true"
+  email_routing         = get_env("QEZTA_DNS_EMAIL_ROUTING", "false") == "true"
   enable_dnssec         = get_env("QEZTA_DNS_DNSSEC", "false") == "true"
 }
