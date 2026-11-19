@@ -53,7 +53,9 @@ in
       delete_branch_on_merge = "\${each.value.delete_branch_on_merge}";
       topics = "\${each.value.topics}";
       homepage_url = "\${try(each.value.homepage_url, null)}";
-      vulnerability_alerts = "\${each.value.visibility == \"public\" ? true : false}";
+      ## GitHub switches Dependabot alerts off on archived repos and won't
+      ## turn them back on, so only ask for them on active public repos.
+      vulnerability_alerts = "\${each.value.visibility == \"public\" && !try(each.value.archived, false)}";
       lifecycle = {
         prevent_destroy = true;
         ignore_changes = ["auto_init"];
