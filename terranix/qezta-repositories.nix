@@ -24,9 +24,6 @@
     delete_branch_on_merge = false;
   };
   "divit" = {
-    ## gen-sitemap.yml commits straight to the default branch.
-    ## TODO: make it open a pull request, then drop this.
-    ruleset_require_pr = false;
     description = "divit.qezta.com: personal portfolio with Gemini-powered RAG chatbot";
     homepage_url = "https://divit.qezta.com";
     visibility = "public";
@@ -69,9 +66,6 @@
     archived = true;
   };
   "site" = {
-    ## gen-sitemap.yml commits straight to the default branch.
-    ## TODO: make it open a pull request, then drop this.
-    ruleset_require_pr = false;
     description = "qezta.com: marketing site for Qezta";
     homepage_url = "https://qezta.com";
     visibility = "public";
