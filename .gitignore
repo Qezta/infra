@@ -8,6 +8,8 @@ orgs/*/backend.tf
 orgs/*/main.tf.json
 dns/*/backend.tf
 dns/*/main.tf.json
+vercel/*/backend.tf
+vercel/*/main.tf.json
 *.tfstate
 *.tfstate.*
 *.tfvars
