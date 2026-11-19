@@ -16,16 +16,19 @@ flowchart TD
 
 ## 0. Prerequisites
 
-- **Cloudflare account** and its account ID (`CLOUDFLARE_ACCOUNT_ID`).
-- **Cloudflare API token** (`CLOUDFLARE_API_TOKEN`) with Zone: Edit, DNS: Edit,
-  Zone Settings: Edit, Email Routing Rules: Edit, and account-level Email
-  Routing Addresses: Edit.
-- **Spaceship API key and secret** (`SPACESHIP_API_KEY`, `SPACESHIP_API_SECRET`),
-  used only for the nameserver change in stage 4.
-- **The forwarding inbox** in `QEZTA_EMAIL_FORWARD_TO` (kept out of git).
-- **A full record export from the Spaceship dashboard.** The records in
-  `terranix/qezta-dns.nix` come from public DNS lookups, which can't find
-  names nobody queried. Add anything missing before stage 4.
+Credentials live encrypted in DivitMittal/infra-nixCfg-secrets and are
+decrypted at run time by `scripts/read-secret` (needs the agenix key at
+`~/.ssh/agenix/id_ed25519` and a checkout of that repo):
+
+| Secret | Use |
+| --- | --- |
+| `cloud/cloudflare/account_id.age` | Account that owns the zone |
+| `cloud/cloudflare/api_token.age` | Account token: Zone, DNS, Zone Settings, Email Routing Rules/Addresses: Edit |
+| `cloud/cloudflare/email_forward_to.age` | Inbox every forwarded address delivers to |
+| `cloud/spaceship/api_key.age`, `api_secret.age` | Registrar: the nameserver change in stage 4 |
+
+The records in `terranix/qezta-dns.nix` match a full export from the
+Spaceship API (2026-11-19).
 
 ## 1. Build (no visible change)
 

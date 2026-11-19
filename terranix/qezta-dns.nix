@@ -6,9 +6,8 @@
 {lib, ...}: let
   domain = "qezta.com";
 
-  ## Records Spaceship DNS serves today (public DNS, 2026-11-17).
-  ## TODO(divit): confirm against a full export from the Spaceship dashboard;
-  ## names nobody queries can't be discovered from outside.
+  ## Every custom record Spaceship DNS serves (Spaceship API export,
+  ## 2026-11-19).
   ## Spaceship's email-forwarding MX/SPF are deliberately absent: Email
   ## Routing publishes its own, and two SPF records would break SPF.
   records = {
@@ -29,6 +28,12 @@
       name = "divit";
       content = "4deef02f11d29c72.vercel-dns-017.com";
       comment = "Vercel: divit.qezta.com";
+    };
+    www-divit = {
+      type = "CNAME";
+      name = "www.divit";
+      content = "4deef02f11d29c72.vercel-dns-017.com";
+      comment = "Vercel: www.divit.qezta.com";
     };
     google-site-verification = {
       type = "TXT";
