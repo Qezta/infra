@@ -14,6 +14,8 @@
 ##                           to it (e.g. gen-sitemap), since GitHub Actions can't be a
 ##                           ruleset bypass actor in this org
 ##   require_signed_commits  bool (default false)
+##   archived                bool (default false); archived repos get no
+##                           ruleset or Actions settings (they're read-only)
 {
   ".github" = {
     description = "Qezta org profile";
@@ -57,16 +59,14 @@
     workflow_permissions = "write";
   };
   "qezta-website" = {
-    ## gen-sitemap.yml commits straight to the default branch.
-    ## TODO: make it open a pull request, then drop this.
-    ruleset_require_pr = false;
-    description = "Qezta Website";
-    homepage_url = "https://www.Qezta.com";
+    ## Decommissioned 2026-11-19: divit.qezta.com and qezta.com now deploy
+    ## from Qezta/divit and Qezta/site (Vercel projects divit and site).
+    description = "Archived: superseded by Qezta/divit (divit.qezta.com) and Qezta/site (qezta.com)";
+    homepage_url = "https://qezta.com";
     visibility = "public";
-    topics = ["flake-parts" "nix" "personal-website" "qezta" "svelte" "typescript" "vercel" "vercel-deployment" "vite"];
+    topics = ["archived" "qezta" "svelte" "vercel"];
     delete_branch_on_merge = false;
-    ## gen-sitemap.yml pushes commits without declaring `permissions:`.
-    workflow_permissions = "write";
+    archived = true;
   };
   "site" = {
     ## gen-sitemap.yml commits straight to the default branch.

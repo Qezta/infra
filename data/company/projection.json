@@ -117,7 +117,7 @@
           "pattern": "*"
         }
       ],
-      "description": "divit.qezta.com: personal portfolio with a Gemini-powered RAG chatbot (standalone repository).",
+      "description": "divit.qezta.com: personal portfolio with a Gemini-powered RAG chatbot (Vercel project `divit`).",
       "domain": "web",
       "lifecycle": "experimental",
       "owner": "engineering",
@@ -156,22 +156,6 @@
       "repo": "Qezta/infra",
       "type": "infrastructure"
     },
-    "qezta-website": {
-      "codeowners": [
-        {
-          "owners": [
-            "engineering"
-          ],
-          "pattern": "*"
-        }
-      ],
-      "description": "Monorepo that Vercel deploys as divit.qezta.com and qezta.com (apps/divit, apps/qezta, packages/ui).",
-      "domain": "web",
-      "lifecycle": "experimental",
-      "owner": "engineering",
-      "repo": "Qezta/qezta-website",
-      "type": "website"
-    },
     "secrets": {
       "codeowners": [
         {
@@ -197,7 +181,7 @@
           "pattern": "*"
         }
       ],
-      "description": "qezta.com: marketing site for Qezta (standalone repository, under development).",
+      "description": "qezta.com: marketing site for Qezta, under development (Vercel project `site`).",
       "domain": "web",
       "lifecycle": "experimental",
       "owner": "engineering",

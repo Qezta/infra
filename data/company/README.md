@@ -14,5 +14,5 @@ copy the file over (the sync will be automated).
 
 | Field | Value |
 | --- | --- |
-| Source | `Qezta/company@1e6d1f66565c368a3cf76b1d8dbeb32146faed05` |
-| Synced | 2026-11-17 |
+| Source | `Qezta/company@92c91f7e5d461a36cdd527fdf4a646f49febab9b` |
+| Synced | 2026-11-19 |

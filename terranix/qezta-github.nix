@@ -49,7 +49,7 @@ in
       has_issues = true;
       has_wiki = false;
       has_projects = false;
-      archived = false;
+      archived = "\${try(each.value.archived, false)}";
       delete_branch_on_merge = "\${each.value.delete_branch_on_merge}";
       topics = "\${each.value.topics}";
       homepage_url = "\${try(each.value.homepage_url, null)}";
