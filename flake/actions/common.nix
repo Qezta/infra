@@ -11,6 +11,10 @@
           "flake.nix"
           "flake.lock"
           "flake/**"
+          "terranix/**"
+          "data/**"
+          "tests/**"
+          "scripts/**"
         ];
       };
       pull_request = push;

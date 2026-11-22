@@ -26,6 +26,7 @@
           fix-byte-order-marker.enable = true;
           check-merge-conflicts.enable = true;
           detect-private-keys.enable = true;
+          shellcheck.enable = true;
         };
       };
     };
