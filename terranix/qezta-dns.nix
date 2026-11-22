@@ -35,6 +35,12 @@
       content = "4deef02f11d29c72.vercel-dns-017.com";
       comment = "Vercel: www.divit.qezta.com";
     };
+    divit-dnslink = {
+      type = "TXT";
+      name = "_dnslink.divit";
+      content = "dnslink=/ipns/k51qzi5uqu5dhpcpz3aoftwf32m7gkgdw0i4tlac9ercttqdzukhtfma4lxpsa";
+      comment = "IPNS: static portfolio published by T3";
+    };
     google-site-verification = {
       type = "TXT";
       name = "@";
