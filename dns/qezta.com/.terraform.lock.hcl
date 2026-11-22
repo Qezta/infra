@@ -5,7 +5,10 @@ provider "registry.opentofu.org/cloudflare/cloudflare" {
   version     = "5.29.0"
   constraints = "~> 5.0"
   hashes = [
+    "h1:1fDzIJCxqkosa3+q7RJA3e4CBxFoCHHtQDz0ZkHGUWg=",
+    "h1:7snwBVH/8lU0VGPFJJbhY5gJaR7lr7QaHcMbaLUIfIE=",
     "h1:aZ2n8SKJU5xc4PZlwtfrUkWnFFU2RAzYlEzDt7VqHE0=",
+    "h1:kq/wD48tBtyPJFzIOErwAadH5JE3xe26T4/iY32mnTk=",
     "zh:1655a39cc8ca475ef4fbfec621e54e6f5094d2b9a3787bd3d98b31cab5389a36",
     "zh:65a94845c9fd0192a861f284c121690b3765a8e7b957c9dc6700994aa894c56b",
     "zh:71daa8096dda9d6a6f244e2ab2b3067d63764f7007c25249146ba16e375162b1",
@@ -23,6 +26,9 @@ provider "registry.opentofu.org/namecheap/spaceship" {
   constraints = "~> 1.0"
   hashes = [
     "h1:LRnZ8SWvVuVoWeXjZAvOjsHnQDuHZh0IjmTtJjP/5Dk=",
+    "h1:PgQK0Z+7rka2irZ2B2x5Tje8gS9UW/XHMITZSDOCA54=",
+    "h1:ZWYArZrvVdF5xJ1Mz/LV0auWm6yrzsyhf6wgIb+Z4ds=",
+    "h1:t9GuZaHVmSoWcACsRdHOvCXAgW8cxxBYGtRvqCraVBU=",
     "zh:0a7bd9be628f303f88f1630c09b37ec8ef409aae4595bafe72a9f99dd9e064cf",
     "zh:3a65bd63798472010639656960c6971a098d1f753d1842d1ed8ffb7d70929d48",
     "zh:53869cb8c58cd7c96c08e760afa5c652d216f80b9ddfbf8a8e79d0eb47cd3bb9",

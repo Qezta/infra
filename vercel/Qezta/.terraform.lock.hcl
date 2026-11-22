@@ -5,7 +5,10 @@ provider "registry.opentofu.org/vercel/vercel" {
   version     = "5.27.0"
   constraints = "~> 5.27"
   hashes = [
+    "h1:0k1RsGgmhdihlI3RY+ADXxMy2OxO8KHFBjdWJcYAk0Y=",
+    "h1:DarTQASft9wnNpOHnDZAlYZHDF5UgcoWyJvft6EOsqs=",
     "h1:g0Tn5dh8iLz8lgAWa2OQr/1ujKJnjl1mmAW+ogxRqxo=",
+    "h1:skhvILewcj4j+1rJWTtBR4tEb+J0cJoRiW018TGOEw8=",
     "zh:1ae8e3688b75af4319d1d5231dc2ff1e46e567655b3c2de40e889b4bcd84023d",
     "zh:2827994c7c823a7f91e38854e4d567b6cb21956dcffd42b09265c8a845f86e3b",
     "zh:2cf50f94b4bd5424d55d1a85eb00a96b7b934617125d9c00acef716c935d3cb2",
