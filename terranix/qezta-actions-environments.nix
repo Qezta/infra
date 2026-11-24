@@ -36,25 +36,35 @@ in {
     sensitive = true;
   };
 
-  resource.github_repository_environment.actions = lib.listToAttrs (map (e: {
+  ## One resource block each, instanced with for_each over these locals.
+  locals.actions_environments = lib.listToAttrs (map (e: {
       name = envKey e;
-      value = {
-        repository = "\${github_repository.repos[\"${e.repo}\"].name}";
-        environment = e.env;
-      };
+      value = {inherit (e) repo env;};
     })
     envList);
 
-  resource.github_actions_environment_secret.actions = lib.listToAttrs (map (s: {
+  locals.actions_environment_secrets = lib.listToAttrs (map (s: {
       name = secretKey s;
       value = {
-        repository = "\${github_repository.repos[\"${s.repo}\"].name}";
-        environment = "\${github_repository_environment.actions[\"${s.repo}:${s.env}\"].environment}";
-        secret_name = s.name;
-        plaintext_value = "\${var.github_actions_secret_values[\"${s.source}\"]}";
+        inherit (s) repo name source;
+        env_key = "${s.repo}:${s.env}";
       };
     })
     secretList);
+
+  resource.github_repository_environment.actions = {
+    for_each = "\${local.actions_environments}";
+    repository = "\${github_repository.repos[each.value.repo].name}";
+    environment = "\${each.value.env}";
+  };
+
+  resource.github_actions_environment_secret.actions = {
+    for_each = "\${local.actions_environment_secrets}";
+    repository = "\${github_repository.repos[each.value.repo].name}";
+    environment = "\${github_repository_environment.actions[each.value.env_key].environment}";
+    secret_name = "\${each.value.name}";
+    plaintext_value = "\${var.github_actions_secret_values[each.value.source]}";
+  };
 
   import = map (e: {
     to = "github_repository_environment.actions[\"${envKey e}\"]";
