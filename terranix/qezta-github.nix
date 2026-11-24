@@ -37,6 +37,7 @@ in
       ./qezta-rulesets.nix
       ./qezta-org.nix
       ./qezta-ci.nix
+      ./qezta-actions-environments.nix
     ];
 
     locals.repos = repos;
