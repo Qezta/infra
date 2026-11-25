@@ -131,9 +131,30 @@ in {
       type = "bool";
       default = false;
     };
+    portfolio_ssh_ipv4 = {
+      description = "Verified public IPv4 for the homelab SSH portfolio, not the router LAN or CGNAT address.";
+      type = "string";
+      default = null;
+      validation = {
+        condition = "\${var.portfolio_ssh_ipv4 == null ? true : can(cidrnetmask(format(\"%s/32\", var.portfolio_ssh_ipv4)))}";
+        error_message = "The portfolio SSH address must be IPv4.";
+      };
+    };
   };
 
   resource = {
+    # The registrar still serves DNS before cutover. Manage only the SSH
+    # record there, never the whole custom-record set.
+    spaceship_dns_record.portfolio-ssh = {
+      count = "\${var.portfolio_ssh_ipv4 != null && !var.cutover ? 1 : 0}";
+      inherit domain;
+      type = "A";
+      name = "ssh";
+      address = "\${var.portfolio_ssh_ipv4}";
+      ttl = 300;
+      lifecycle.create_before_destroy = true;
+    };
+
     cloudflare_zone.qezta = {
       account.id = "\${var.cloudflare_account_id}";
       name = domain;
@@ -150,6 +171,18 @@ in {
         proxied = false;
       })
       records
+      // {
+        portfolio-ssh = {
+          count = "\${var.portfolio_ssh_ipv4 == null ? 0 : 1}";
+          zone_id = "\${cloudflare_zone.qezta.id}";
+          type = "A";
+          name = "ssh";
+          content = "\${var.portfolio_ssh_ipv4}";
+          comment = "Qezta SSH portfolio on T3 (not admin SSH)";
+          ttl = 300;
+          proxied = false;
+        };
+      }
       ## Spaceship forwarding's MX/SPF carry mail across the cutover, until
       ## Email Routing (which needs an active zone) replaces them.
       // lib.mapAttrs (_: r:
