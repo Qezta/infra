@@ -2,6 +2,7 @@
     <div align="center">
         <img alt='Animated Qezta torus logo' title='Qezta' height=250 width=250 src='https://qezta.com/qezta.gif' /><sup>™</sup>
         <p>The Qezta torus logo, including its animated version, is a trademark of Qezta.</p>
+        <p>© 2025–2026 Divit Mittal. All rights reserved. Qezta (OPC) Pvt. Ltd. is the intended registered name and is not yet incorporated.</p>
         <h1 align='center'>infra</h1>
         <strong>Qezta's infrastructure as code: GitHub org, repositories, teams and DNS (OpenTofu, Terranix, Terragrunt)</strong>
     </div>
