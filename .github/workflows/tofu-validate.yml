@@ -34,6 +34,8 @@ jobs:
           package: qezta-dns-json
         - dir: vercel/Qezta
           package: qezta-vercel-json
+        - dir: huggingface/Qezta
+          package: qezta-huggingface-json
     timeout-minutes: 30
 name: tofu validate
 'on':
@@ -44,6 +46,7 @@ name: tofu validate
     - orgs/**
     - dns/**
     - vercel/**
+    - huggingface/**
     - flake.lock
     - flake/terranix*.nix
     - flake/actions/tofu-validate.nix
@@ -56,6 +59,7 @@ name: tofu validate
     - orgs/**
     - dns/**
     - vercel/**
+    - huggingface/**
     - flake.lock
     - flake/terranix*.nix
     - flake/actions/tofu-validate.nix

@@ -15,6 +15,8 @@
         motd = "{202}Welcome to {91}${name} {202}devshell!{reset} \n $(menu)";
         packages = lib.attrsets.attrValues {
           inherit (pkgs) age alejandra gh nixd opentofu terragrunt dig;
+          ## hf CLI: pushes the Hugging Face org card (huggingface/Qezta).
+          inherit (pkgs.python3Packages) huggingface-hub;
         };
       };
     };
