@@ -34,6 +34,11 @@ def vercel():
     return _load("QEZTA_VERCEL_JSON")
 
 
+@pytest.fixture(scope="module")
+def huggingface():
+    return _load("QEZTA_HUGGINGFACE_JSON")
+
+
 DOMAIN = "qezta.com"
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
@@ -124,7 +129,7 @@ def test_forward_inbox_comes_from_a_sensitive_variable(dns):
     assert dns["variable"]["email_forward_to"]["sensitive"] is True
 
 
-@pytest.mark.parametrize("stack", ["dns", "github", "vercel"])
+@pytest.mark.parametrize("stack", ["dns", "github", "vercel", "huggingface"])
 def test_no_personal_email_addresses_committed(stack, request):
     text = json.dumps(request.getfixturevalue(stack))
     leaked = {e for e in EMAIL_RE.findall(text) if not e.endswith(f"@{DOMAIN}")}
@@ -252,3 +257,39 @@ def test_vercel_imports_cover_every_project_and_domain(vercel):
     for kind in ("vercel_project", "vercel_project_domain"):
         for key in vercel["resource"][kind]:
             assert f"{kind}.{key}" in targets, f"{kind}.{key} would be created instead of adopted"
+
+
+# ---------------------------------------------------------------- Hugging Face
+
+
+def test_huggingface_provider_is_pinned_exactly(huggingface):
+    p = huggingface["terraform"]["required_providers"]["huggingface"]
+    assert p["source"].endswith("m11s-io/huggingface")
+    assert p["version"].startswith("= "), "pre-1.0 provider: pin an exact version"
+
+
+def test_huggingface_token_never_in_config(huggingface):
+    assert "token" not in (huggingface["provider"]["huggingface"] or {}), "use HF_TOKEN from the environment"
+    assert "hf_" not in json.dumps(huggingface).replace("hf_token", "")
+
+
+def test_huggingface_repos_are_retained(huggingface):
+    for key, r in huggingface.get("resource", {}).get("huggingface_repository", {}).items():
+        assert r["deletion_policy"] == "retain", key
+        assert r["lifecycle"]["prevent_destroy"] is True, key
+        assert r["namespace"] == "Qezta", key
+
+
+def test_org_card_targets_the_org_readme_space(huggingface):
+    card = huggingface["resource"]["terraform_data"]["org_card"]
+    cmd = card["provisioner"]["local-exec"]["command"]
+    assert cmd.split()[-2] == "Qezta/README"
+    assert card["triggers_replace"]["card"] == cmd.split()[-1]
+
+
+def test_org_card_drift_feeds_its_trigger(huggingface):
+    probe = huggingface["data"]["external"]["org_card_state"]
+    assert probe["query"]["repo"] == "Qezta/README"
+    card = huggingface["resource"]["terraform_data"]["org_card"]
+    assert probe["query"]["card"] == card["triggers_replace"]["card"]
+    assert card["triggers_replace"]["remote"] == "${data.external.org_card_state.result.state}"

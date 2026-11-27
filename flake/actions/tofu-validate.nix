@@ -7,7 +7,7 @@ _: let
     nixInstall = "nixbuild/nix-quick-install-action@9f63be77f412a248c9d9a65a4c82cf066cdf8f0c"; # v35
     nixCache = "DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7"; # v15
   };
-  paths = ["terranix/**" "data/**" "orgs/**" "dns/**" "vercel/**" "flake.lock" "flake/terranix*.nix" "flake/actions/tofu-validate.nix"];
+  paths = ["terranix/**" "data/**" "orgs/**" "dns/**" "vercel/**" "huggingface/**" "flake.lock" "flake/terranix*.nix" "flake/actions/tofu-validate.nix"];
 in {
   flake.actions-nix.workflows.".github/workflows/tofu-validate.yml" = {
     name = "tofu validate";
@@ -35,6 +35,10 @@ in {
           {
             package = "qezta-vercel-json";
             dir = "vercel/Qezta";
+          }
+          {
+            package = "qezta-huggingface-json";
+            dir = "huggingface/Qezta";
           }
         ];
       };

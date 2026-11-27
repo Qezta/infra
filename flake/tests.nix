@@ -18,6 +18,7 @@
         QEZTA_DNS_JSON = config.packages.qezta-dns-json;
         QEZTA_GITHUB_JSON = config.packages.qezta-github-json;
         QEZTA_VERCEL_JSON = config.packages.qezta-vercel-json;
+        QEZTA_HUGGINGFACE_JSON = config.packages.qezta-huggingface-json;
       } ''
         cd ${src}
         pytest -p no:cacheprovider -v tests

@@ -48,6 +48,7 @@ ______________________________________________________________________
 - [Project Structure](#project-structure)
 - [GitHub Organization](#github-organization)
 - [DNS](#dns)
+- [Hugging Face](#hugging-face)
 - [State and CI](#state-and-ci)
 - [Decisions](#decisions)
 
@@ -134,6 +135,25 @@ registrar). `dns/qezta.com` declares the zone, every record, and Cloudflare
 Email Routing forwards for `divit@`, `hello@`, `hi@`, `security@`,
 `privacy@` and `legal@`. The nameserver cutover is a flagged stage, guarded
 against DNSSEC breakage; follow [docs/dns-migration.md](docs/dns-migration.md).
+
+## Hugging Face
+
+`huggingface/Qezta` manages [huggingface.co/Qezta](https://huggingface.co/Qezta)
+from `terranix/qezta-huggingface.nix`:
+
+| What | How | Notes |
+| --- | --- | --- |
+| Model repositories | [`m11s-io/huggingface`](https://registry.terraform.io/providers/m11s-io/huggingface) (pinned `= 0.1.0`) | Identity and visibility only; destroy always retains the repo |
+| Org card | `huggingface/org-card/` pushed to the `Qezta/README` Space by the `hf` CLI | Re-pushed only when the card's files change |
+
+`HF_TOKEN` is decrypted from [Qezta/secrets](https://github.com/Qezta/secrets)
+(`forge/huggingface/tofu.age`), or taken from `HF_TOKEN_QEZTA` when set. It
+needs write access to the Qezta org.
+
+```sh
+cd huggingface/Qezta
+terragrunt plan
+```
 
 ## State and CI
 

@@ -10,6 +10,8 @@ dns/*/backend.tf
 dns/*/main.tf.json
 vercel/*/backend.tf
 vercel/*/main.tf.json
+huggingface/*/backend.tf
+huggingface/*/main.tf.json
 *.tfstate
 *.tfstate.*
 *.tfvars
