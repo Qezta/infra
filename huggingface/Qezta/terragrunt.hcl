@@ -35,8 +35,7 @@ terraform {
   extra_arguments "credentials" {
     commands = ["init", "plan", "apply", "destroy", "import", "refresh", "output", "state", "validate"]
     env_vars = {
-      # Read by the m11s-io/huggingface provider and by the hf CLI that pushes
-      # the org card.
+      # Read by the m11s-io/huggingface provider and by the org card scripts.
       HF_TOKEN = local.hf_token
       HF_HUB_DISABLE_TELEMETRY = "1"
     }

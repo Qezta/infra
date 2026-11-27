@@ -8,7 +8,20 @@
 ## Token: HF_TOKEN, decrypted by huggingface/Qezta/terragrunt.hcl from
 ## Qezta/secrets (forge/huggingface/tofu.age). It needs write access to the
 ## Qezta org.
-{lib, ...}: let
+##
+## Drift: model repos are refreshed by the provider like any resource. The org
+## card has no provider, so data.external.org_card_state runs
+## scripts/org_card_state.py on every plan. It compares the Space's file tree
+## (git blob ids) with huggingface/org-card and returns "in_sync", "missing"
+## or "drift:<n> files differ". That state is part of the card's trigger, so a
+## Hub-side edit, a stray file or a deleted Space plans a re-push. After a
+## heal the next plan re-runs once more (a no-op: unchanged uploads are
+## skipped) to record "in_sync", then stays clean.
+{
+  lib,
+  pkgs,
+  ...
+}: let
   namespace = "Qezta";
 
   ## Model repositories. `existing = true` adopts a repo that's already on the
@@ -17,13 +30,29 @@
   models = {};
 
   card = ../huggingface/org-card;
+  cardRepo = "${namespace}/README";
+  hfPython = pkgs.python3.withPackages (ps: [ps.huggingface-hub]);
 in {
   terraform.required_version = ">= 1.11";
-  terraform.required_providers.huggingface = {
-    source = "registry.terraform.io/m11s-io/huggingface";
-    version = "= 0.1.0";
+  terraform.required_providers = {
+    huggingface = {
+      source = "registry.terraform.io/m11s-io/huggingface";
+      version = "= 0.1.0";
+    };
+    external = {
+      source = "hashicorp/external";
+      version = "~> 2.3";
+    };
   };
   provider.huggingface = {};
+
+  data.external.org_card_state = {
+    program = ["${pkgs.python3}/bin/python3" "${../huggingface/scripts/org_card_state.py}"];
+    query = {
+      repo = cardRepo;
+      card = "${card}";
+    };
+  };
 
   resource = {
     huggingface_repository =
@@ -36,19 +65,14 @@ in {
       models;
 
     ## The org card: huggingface.co/spaces/Qezta/README renders on the org page.
-    ## Re-runs only when the card's content changes (its store path is a content
-    ## hash). Destroying this resource leaves the Space in place.
+    ## Replaced (so re-pushed) when the card or the Space's drift state
+    ## changes. Destroying it leaves the Space in place.
     terraform_data.org_card = {
-      triggers_replace = "${card}";
-      provisioner.local-exec = {
-        working_dir = "${card}";
-        command = ''
-          set -eu
-          hf repos create ${namespace}/README --type space --space-sdk static --public --exist-ok
-          hf upload ${namespace}/README . . --repo-type space --commit-message "chore: sync org card from Qezta/infra"
-        '';
-        interpreter = ["sh" "-c"];
+      triggers_replace = {
+        card = "${card}";
+        remote = "\${data.external.org_card_state.result.state}";
       };
+      provisioner.local-exec.command = "${hfPython}/bin/python3 ${../huggingface/scripts/org_card_push.py} ${cardRepo} ${card}";
     };
   };
 

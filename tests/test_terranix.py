@@ -283,5 +283,13 @@ def test_huggingface_repos_are_retained(huggingface):
 def test_org_card_targets_the_org_readme_space(huggingface):
     card = huggingface["resource"]["terraform_data"]["org_card"]
     cmd = card["provisioner"]["local-exec"]["command"]
-    assert "Qezta/README" in cmd and "--type space" in cmd and "--public" in cmd
-    assert card["triggers_replace"] == card["provisioner"]["local-exec"]["working_dir"]
+    assert cmd.split()[-2] == "Qezta/README"
+    assert card["triggers_replace"]["card"] == cmd.split()[-1]
+
+
+def test_org_card_drift_feeds_its_trigger(huggingface):
+    probe = huggingface["data"]["external"]["org_card_state"]
+    assert probe["query"]["repo"] == "Qezta/README"
+    card = huggingface["resource"]["terraform_data"]["org_card"]
+    assert probe["query"]["card"] == card["triggers_replace"]["card"]
+    assert card["triggers_replace"]["remote"] == "${data.external.org_card_state.result.state}"
